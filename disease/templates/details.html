@@ -1,0 +1,157 @@
+{% load static %}
+{% if profile.user_role == 'subscriber' %}
+{% include "layouts/admin_header.html" with uname=profile.userfirstname %}
+{% else %}
+{% include "layouts/staff_header.html" with uname=profile.userfirstname %}
+{% endif %}
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+
+{% if data %}
+
+<div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            {% if profile.user_role == 'subscriber' %}
+            <h4 class="page-title">Your report has been created successfully!</h4>
+            {% else %}
+            <h4 class="page-title">{{userprofile.userfirstname}} {{userprofile.userlastname}} Report</h4>
+            {% endif %}
+        </div>
+        <div class="col-lg-6 col-sm-4 col-md-6 col-xs-12">
+            {% if profile.user_role == 'subscriber' %}
+            <div style="float:right;" class="d-md-flex">
+                <a href="http://127.0.0.1:8000/disease" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">Find New Disease</a>
+            </div>
+            {% else %}
+            <div style="float:right;" class="d-md-flex">
+                <a href="http://127.0.0.1:8000/userdetails/{{userprofile.user_id}}" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">Back To {{userprofile.userfirstname}} Dashboard</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% for d in data %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-12">
+            <div class="white-box analytics-info">
+                {% if profile.user_role == 'subscriber' %}
+                <h3 class="box-title">You Uploaded: </h3>
+                {% else %}
+                <h3 class="box-title">Uploaded By: {{userprofile.userfirstname}} {{userprofile.userlastname}}</h3>
+                {% endif %}
+                <div class="imgView">
+                    <img src="{{ MEDIA_URL }}{{ d.image }}" alt=""/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Disease Reports By Our Custom Model</h3>
+                <ul class="iline list-inline two-part d-flex align-items-center mb-0">
+                    <li>
+                        <div class="icontainer">
+                            <div style="width:{{d.summary_val}}%" class="iskills ibar">{{d.summary_val}}%</div>
+                        </div>
+                    </li>
+                    <li class="ms-auto"><span class="counter text-purple">{{d.summary}}</span></li>
+                </ul>
+            </div>
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Disease Reports By Inception V3 Model</h3>
+                <ul class="iline list-inline two-part d-flex align-items-center mb-0">
+                    <li>
+                        <div class="icontainer">
+                            <div style="width:{{d.summary_inception_val}}%" class="iskills ibar">{{d.summary_inception_val}}%</div>
+                        </div>
+                    </li>
+                    <li class="ms-auto"><span class="counter text-purple">{{d.summary_inception}}</span></li>
+                </ul>
+            </div>
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Disease Reports By vgg16 Model</h3>
+                <ul class="iline list-inline two-part d-flex align-items-center mb-0">
+                    <li>
+                        <div class="icontainer">
+                            <div style="width:{{d.summary_vgg_val}}%" class="iskills ibar">{{d.summary_vgg_val}}%</div>
+                        </div>
+                    </li>
+                    <li class="ms-auto"><span class="counter text-purple">{{d.summary_vgg}}</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="white-box analytics-info details-bar">
+        <h3 class="box-title">Report Details: </h3>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table dtable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">Custom Model</th>
+                                <th class="border-top-0">Inception V3</th>
+                                <th class="border-top-0">VGG 16</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{d.summary_desc|safe}}</td>
+                                <td>{{d.summary_inception_desc|safe}}</td>
+                                <td>{{d.summary_vgg_desc|safe}}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="3"><span class="txtcenter">Disease Details</span></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    According our <strong>custom model</strong> we get <strong>{{d.summary}}</strong><br/><br/>
+                                    {% for o in one %}
+                                    <p>{{o.description|safe}}</p>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    According our <strong>inception v3</strong> model we get <strong>{{d.summary_inception}}</strong><br/><br/>
+                                    {% for oo in two %}
+                                    <p>{{oo.description|safe}}</p>
+                                    {% endfor %}
+                                </td>
+                                <td>According our <strong>vgg16</strong> model we get <strong>{{d.summary_vgg}}</strong><br/><br/>
+                                    {% for ooo in three %}
+                                    <p>{{ooo.description|safe}}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% else %}
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <div class="d-md-flex mb-3">
+                    <h3 class="box-title mb-0">No Data Found</h3>
+                    <br/>
+                    <a href="http://127.0.0.1:8000/dashboard" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">Back To Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+</div>
+
+{% endif %}
+
+{% include "layouts/admin_footer.html" %}

@@ -1,0 +1,12 @@
+Database Migration Command:
+python manage.py migrate --run-syncdb
+Run Software:
+python manage.py runserver
+
+
+python manage.py makemigrations
+python manage.py migrate
+
+new update
+-------------
+L:\machine_learning\diseasev2\disease\disease\templates\dashboard.html

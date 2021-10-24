@@ -1,0 +1,66 @@
+{% load static %}
+
+{% url 'userreport' as userreport %}
+
+{% if profile.user_role == 'subscriber' %}
+{% include "layouts/admin_header.html" with uname=profile.userfirstname %}
+{% else %}
+{% include "layouts/staff_header.html" with uname=profile.userfirstname %}
+{% endif %}
+
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb bg-white">
+    <div class="row align-items-center">
+        <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
+            <h4 style="font-size: 14px;" class="page-title">Skin Disease Detection System</h4>
+        </div>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <div class="d-md-flex mb-3">
+                    <h3 class="box-title mb-0">Analysis Report By {{userprofile.userfirstname}} {{userprofile.userlastname}}</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table no-wrap">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">#</th>
+                                <th class="border-top-0">Summary</th>
+                                <th class="border-top-0">Image</th>
+                                <th class="border-top-0">Action</th>
+                                <th class="border-top-0">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in data %}
+                            <tr>
+                                <td><span class="icount-btn">{{ forloop.counter }}</span></td>
+                                <td class="txt-oflo">
+                                    <p><span style="color:red">By Custom Model:</span> {{ d.summary }} {{d.summary_val}}%</p>
+                                    <p><span style="color:red">By Inception v3 Model:</span> {{d.summary_inception}} {{d.summary_inception_val}}%</p>
+                                    <p><span style="color:red">By vgg16 Model: </span>{{d.summary_vgg}} {{d.summary_vgg_val}}%</p>
+                                </td>
+                                <td><img style="width:120px;height:100px;" src="{{ MEDIA_URL }}{{ d.image }}" alt=""/></td>
+                                <td><a style="margin-left:0 !important;" href="{% url 'details' d.id %}" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">View Details</a></td>
+                                <td class="txt-oflo">{{ d.created_at }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+</div>
+
+
+{% include "layouts/admin_footer.html" %}

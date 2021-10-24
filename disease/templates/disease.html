@@ -1,0 +1,58 @@
+{% load static %}
+{%load crispy_forms_tags %}
+
+{% include "layouts/header.html" %}
+
+<section class="home-slider inner-page owl-carousel">
+  <div class="slider-item" style="background-image: url('{% static 'assets/img/login-slider.png'%}');">
+
+    <div class="container">
+      <div class="row slider-text align-items-center">
+        <div class="col-md-7 col-sm-12 element-animate">
+          <h1>Find Disease</h1>
+          <p>Upload disease image and detect disease</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+<!-- END slider -->
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Alert! </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-5 element-animate">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-12 form-group">
+              <label for="upimg">Upload Image</label>
+              <!-- <input type="file" name="image" id="upimg" class="form-control form-control-lg" required> -->
+              {{ form|crispy }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 form-group">
+              <input type="submit" value="Find Disease" class="btn btn-primary btn-lg btn-block">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "layouts/footer.html" %}
